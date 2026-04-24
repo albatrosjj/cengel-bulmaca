@@ -206,7 +206,14 @@ function GameScreen({ onBack }: { onBack: () => void }) {
                         isSel && styles.selectedCell,
                       ]}
                     >
-                      {num ? <Text style={styles.cellNumber}>{num}</Text> : null}
+                      {num ? (
+                        <View style={styles.cellNumberBox}>
+                          <Text style={styles.cellNumber}>{num}</Text>
+                          <Text style={styles.cellArrow}>
+                            {(puzzle.words.find(w => w.number === num)?.direction === 'across') ? '→' : '↓'}
+                          </Text>
+                        </View>
+                      ) : null}
                       {!isBlack && (
                         <Text style={[
                           styles.cellText,
@@ -235,7 +242,7 @@ function GameScreen({ onBack }: { onBack: () => void }) {
                         styles.clueItem,
                         activeWord?.number === w.number && activeWord?.direction === 'across' && styles.clueActive
                       ]}>
-                        <Text style={styles.clueNum}>{w.number}.</Text> {w.clue}
+                        <Text style={styles.clueNum}>{w.number}. →</Text> {w.clue}
                       </Text>
                     </TouchableOpacity>
                   ))}
@@ -250,7 +257,7 @@ function GameScreen({ onBack }: { onBack: () => void }) {
                         styles.clueItem,
                         activeWord?.number === w.number && activeWord?.direction === 'down' && styles.clueActive
                       ]}>
-                        <Text style={styles.clueNum}>{w.number}.</Text> {w.clue}
+                        <Text style={styles.clueNum}>{w.number}. ↓</Text> {w.clue}
                       </Text>
                     </TouchableOpacity>
                   ))}
@@ -264,7 +271,6 @@ function GameScreen({ onBack }: { onBack: () => void }) {
           key={inputKey}
           ref={inputRef}
           style={styles.hiddenInput}
-          autoCapitalize="characters"
           maxLength={1}
           onChangeText={handleTextChange}
           onKeyPress={handleKeyPress}
@@ -316,7 +322,17 @@ const styles = StyleSheet.create({
   activeCell: { backgroundColor: '#bfdbfe' },
   selectedCell: { backgroundColor: '#60a5fa', borderColor: '#2563eb', borderWidth: 1.5 },
   cellNumber: {
-    position: 'absolute', top: 1, left: 2, fontSize: 8, color: '#475569', fontWeight: '700'
+    fontSize: 9, color: '#fff', fontWeight: '800', lineHeight: 10
+  },
+  cellNumberBox: {
+    position: 'absolute', top: 0, left: 0,
+    backgroundColor: '#0f172a', borderBottomRightRadius: 4,
+    paddingHorizontal: 3, paddingVertical: 1,
+    flexDirection: 'row', alignItems: 'center', gap: 2,
+    zIndex: 2
+  },
+  cellArrow: {
+    fontSize: 8, color: '#facc15', fontWeight: '800', lineHeight: 10
   },
   cellText: { fontSize: CELL_SIZE * 0.55, fontWeight: '800', color: '#0f172a' },
   correctText: { color: '#16a34a' },
